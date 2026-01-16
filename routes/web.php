@@ -10,7 +10,13 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $stats = [
+        'total_alunos' => \App\Models\Aluno::count(),
+        'total_turmas' => \App\Models\Turma::count(),
+        'alunos_ativos' => \App\Models\Aluno::where('status', 'ativo')->count(),
+    ];
+    
+    return view('dashboard', compact('stats'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

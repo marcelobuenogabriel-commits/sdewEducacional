@@ -25,7 +25,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            {{ \App\Models\Aluno::count() }}
+                                            {{ $stats['total_alunos'] }}
                                         </div>
                                     </dd>
                                 </dl>
@@ -55,7 +55,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            {{ \App\Models\Turma::count() }}
+                                            {{ $stats['total_turmas'] }}
                                         </div>
                                     </dd>
                                 </dl>
@@ -85,7 +85,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            {{ \App\Models\Aluno::where('status', 'ativo')->count() }}
+                                            {{ $stats['alunos_ativos'] }}
                                         </div>
                                     </dd>
                                 </dl>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="mt-4">
                             <span class="text-sm font-medium text-gray-500">
-                                {{ round(\App\Models\Aluno::where('status', 'ativo')->count() / max(\App\Models\Aluno::count(), 1) * 100) }}% do total
+                                {{ $stats['total_alunos'] > 0 ? round($stats['alunos_ativos'] / $stats['total_alunos'] * 100) : 0 }}% do total
                             </span>
                         </div>
                     </div>
