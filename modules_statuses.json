@@ -1,5 +1,7 @@
 {
     "Aluno": true,
     "Turma": true,
-    "Auth": true
+    "Auth": true,
+    "Professor": true,
+    "Disciplina": true
 }
