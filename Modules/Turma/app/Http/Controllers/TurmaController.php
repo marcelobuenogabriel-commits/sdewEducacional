@@ -3,6 +3,7 @@
 namespace Modules\Turma\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Turma\Models\Turma;
 use Illuminate\Http\Request;
 
 class TurmaController extends Controller
@@ -12,7 +13,8 @@ class TurmaController extends Controller
      */
     public function index()
     {
-        return view('turma::index');
+        $turmas = Turma::with('alunos')->paginate(15);
+        return view('turma::index', compact('turmas'));
     }
 
     /**
@@ -26,31 +28,65 @@ class TurmaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'codigo' => 'required|string|max:255|unique:turmas',
+            'descricao' => 'nullable|string',
+            'ano' => 'required|integer|min:2000|max:2100',
+            'periodo' => 'required|in:matutino,vespertino,noturno,integral',
+            'vagas_total' => 'required|integer|min:1',
+        ]);
+
+        Turma::create($validated);
+
+        return redirect()->route('turmas.index')->with('success', 'Turma criada com sucesso!');
+    }
 
     /**
-     * Show the specified resource.
+     * Display the specified resource.
      */
-    public function show($id)
+    public function show(Turma $turma)
     {
-        return view('turma::show');
+        $turma->load('alunos');
+        return view('turma::show', compact('turma'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Turma $turma)
     {
-        return view('turma::edit');
+        return view('turma::edit', compact('turma'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(Request $request, Turma $turma)
+    {
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'codigo' => 'required|string|max:255|unique:turmas,codigo,' . $turma->id,
+            'descricao' => 'nullable|string',
+            'ano' => 'required|integer|min:2000|max:2100',
+            'periodo' => 'required|in:matutino,vespertino,noturno,integral',
+            'vagas_total' => 'required|integer|min:1',
+            'ativo' => 'boolean',
+        ]);
+
+        $turma->update($validated);
+
+        return redirect()->route('turmas.index')->with('success', 'Turma atualizada com sucesso!');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy(Turma $turma)
+    {
+        $turma->delete();
+        return redirect()->route('turmas.index')->with('success', 'Turma excluída com sucesso!');
+    }
 }

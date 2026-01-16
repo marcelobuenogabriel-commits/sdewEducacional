@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TurmaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,9 +9,9 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $stats = [
-        'total_alunos' => \App\Models\Aluno::count(),
-        'total_turmas' => \App\Models\Turma::count(),
-        'alunos_ativos' => \App\Models\Aluno::where('status', 'ativo')->count(),
+        'total_alunos' => \Modules\Aluno\Models\Aluno::count(),
+        'total_turmas' => \Modules\Turma\Models\Turma::count(),
+        'alunos_ativos' => \Modules\Aluno\Models\Aluno::where('status', 'ativo')->count(),
     ];
     
     return view('dashboard', compact('stats'));
@@ -23,12 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Alunos routes
-    Route::resource('alunos', AlunoController::class);
-
-    // Turmas routes
-    Route::resource('turmas', TurmaController::class);
 });
 
 require __DIR__.'/auth.php';
