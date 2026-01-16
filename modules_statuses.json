@@ -3,5 +3,7 @@
     "Turma": true,
     "Auth": true,
     "Professor": true,
-    "Disciplina": true
+    "Disciplina": true,
+    "Avaliacao": true,
+    "Frequencia": true
 }

@@ -4,6 +4,7 @@ namespace Modules\Aluno\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Turma\Models\Turma;
 
 class Aluno extends Model
@@ -49,5 +50,13 @@ class Aluno extends Model
     public function turma(): BelongsTo
     {
         return $this->belongsTo(Turma::class);
+    }
+
+    /**
+     * Get the avaliacoes for the aluno.
+     */
+    public function avaliacoes(): HasMany
+    {
+        return $this->hasMany(\Modules\Avaliacao\Models\Avaliacao::class);
     }
 }
