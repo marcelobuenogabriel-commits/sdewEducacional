@@ -1,14 +1,41 @@
 # Sdew Educacional
 
-Sistema de gerenciamento educacional desenvolvido em Laravel 11, resultado da migração do sistema legado zend_sdewEducation (Zend Framework) para uma arquitetura moderna e escalável.
+Sistema de gerenciamento educacional desenvolvido em Laravel 11 com **arquitetura modular**, resultado da migração do sistema legado zend_sdewEducation (Zend Framework) para uma arquitetura moderna e escalável.
 
 ## 📋 Sobre o Projeto
 
-O Sdew Educacional é um sistema de gestão educacional que facilita o gerenciamento de alunos, turmas, e outros módulos relacionados ao ambiente escolar. Este projeto representa a migração completa do sistema legado para Laravel 11, mantendo as funcionalidades essenciais e adicionando recursos modernos de segurança e usabilidade.
+O Sdew Educacional é um sistema de gestão educacional que facilita o gerenciamento de alunos, turmas, e outros módulos relacionados ao ambiente escolar. Este projeto representa a migração completa do sistema legado para Laravel 11, mantendo as funcionalidades essenciais e adicionando recursos modernos de segurança, usabilidade e **organização modular**.
+
+## 🏗️ Arquitetura Modular
+
+O projeto utiliza **nwidart/laravel-modules** para implementar uma arquitetura modular que oferece:
+
+- ✅ **Separação de responsabilidades** - Cada módulo é independente
+- ✅ **Reutilização de código** - Módulos podem ser compartilhados entre projetos
+- ✅ **Desenvolvimento paralelo** - Equipes podem trabalhar em módulos diferentes
+- ✅ **Manutenibilidade** - Código organizado e fácil de manter
+- ✅ **Escalabilidade** - Adicione novos módulos sem afetar os existentes
+
+### Módulos Implementados
+
+#### 1. **Módulo Aluno** (`Modules/Aluno/`)
+- Gerenciamento completo de alunos
+- CRUD com validações
+- Relacionamento com turmas
+- Controle de status
+
+#### 2. **Módulo Turma** (`Modules/Turma/`)
+- Gerenciamento completo de turmas
+- Controle de vagas
+- Gerenciamento de períodos
+- Relacionamento com alunos
+
+Para mais detalhes sobre a arquitetura modular, consulte [MODULES.md](MODULES.md).
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Framework:** Laravel 11.x
+- **Arquitetura:** Modular (nwidart/laravel-modules)
 - **PHP:** 8.3+
 - **Banco de Dados:** MySQL
 - **Autenticação:** Laravel Breeze
@@ -111,34 +138,45 @@ Acesse a aplicação em: `http://localhost:8000`
 
 ```
 sdewEducacional/
-├── app/
+├── app/                      # Código core da aplicação
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── AlunoController.php
-│   │   │   ├── TurmaController.php
-│   │   │   └── Auth/
 │   │   └── Middleware/
-│   ├── Models/
-│   │   ├── Aluno.php
-│   │   ├── Turma.php
-│   │   └── User.php
+│   ├── Models/              # Models compartilhados (User)
 │   └── Providers/
+├── Modules/                 # Módulos da aplicação
+│   ├── Aluno/              # Módulo de Alunos
+│   │   ├── app/
+│   │   │   ├── Http/Controllers/
+│   │   │   ├── Models/
+│   │   │   └── Providers/
+│   │   ├── database/migrations/
+│   │   ├── resources/views/
+│   │   └── routes/
+│   └── Turma/              # Módulo de Turmas
+│       ├── app/
+│       │   ├── Http/Controllers/
+│       │   ├── Models/
+│       │   └── Providers/
+│       ├── database/migrations/
+│       ├── resources/views/
+│       └── routes/
 ├── database/
-│   ├── migrations/
-│   │   ├── create_alunos_table.php
-│   │   ├── create_turmas_table.php
-│   │   └── create_permission_tables.php
+│   ├── migrations/          # Migrations do core
 │   └── seeders/
 ├── resources/
-│   ├── views/
-│   │   ├── alunos/
-│   │   ├── turmas/
-│   │   └── auth/
+│   ├── views/              # Views do core (layouts, auth)
 │   └── css/
-└── routes/
-    ├── web.php
-    └── auth.php
+├── routes/
+│   ├── web.php             # Rotas do core
+│   └── auth.php
+├── config/
+│   └── modules.php         # Configuração dos módulos
+├── MODULES.md              # Documentação da arquitetura modular
+└── README.md
 ```
+
+Para detalhes completos sobre a estrutura modular, veja [MODULES.md](MODULES.md).
 
 ## 🔐 Controle de Permissões
 
@@ -237,6 +275,9 @@ Este projeto é resultado da migração do sistema legado `zend_sdewEducation`. 
 
 ## 🔮 Roadmap
 
+- [x] Arquitetura modular com nwidart/laravel-modules
+- [x] Módulo de Alunos
+- [x] Módulo de Turmas
 - [ ] Módulo de Professores
 - [ ] Sistema de Notas e Avaliações
 - [ ] Gestão de Disciplinas
@@ -244,6 +285,42 @@ Este projeto é resultado da migração do sistema legado `zend_sdewEducation`. 
 - [ ] Relatórios e Dashboards
 - [ ] API completa para integração
 - [ ] Aplicativo mobile
+
+## 📖 Documentação Adicional
+
+- [MODULES.md](MODULES.md) - Documentação completa da arquitetura modular
+- [DATABASE.md](DATABASE.md) - Estrutura do banco de dados
+- [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) - Guia de migração do Zend Framework
+- [SETUP_SUMMARY.md](SETUP_SUMMARY.md) - Resumo da configuração inicial
+
+## 🔧 Comandos de Módulos
+
+### Gerenciamento de Módulos
+```bash
+# Criar um novo módulo
+php artisan module:make NomeDoModulo
+
+# Listar todos os módulos
+php artisan module:list
+
+# Habilitar/Desabilitar módulo
+php artisan module:enable NomeDoModulo
+php artisan module:disable NomeDoModulo
+```
+
+### Geração de Código
+```bash
+# Criar controller no módulo
+php artisan module:make-controller NomeController NomeDoModulo
+
+# Criar model no módulo
+php artisan module:make-model NomeModel NomeDoModulo
+
+# Criar migration no módulo
+php artisan module:make-migration create_nome_table NomeDoModulo
+```
+
+Veja [MODULES.md](MODULES.md) para mais comandos e exemplos.
 
 ---
 

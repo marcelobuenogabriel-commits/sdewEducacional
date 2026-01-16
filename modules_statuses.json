@@ -1,4 +1,5 @@
 {
     "Aluno": true,
-    "Turma": true
+    "Turma": true,
+    "Auth": true
 }
