@@ -5,5 +5,8 @@
     "Professor": true,
     "Disciplina": true,
     "Avaliacao": true,
-    "Frequencia": true
+    "Frequencia": true,
+    "Relatorio": true,
+    "Comunicacao": true,
+    "Financeiro": true
 }
