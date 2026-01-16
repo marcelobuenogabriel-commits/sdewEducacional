@@ -64,7 +64,7 @@ O projeto está organizado nos seguintes módulos:
 - Gerenciamento de vagas (total e ocupadas)
 - Controle de períodos (matutino, vespertino, noturno, integral)
 - Status ativo/inativo
-- Relacionamento com alunos
+- Relacionamento com alunos, professores e disciplinas
 
 **Rotas:**
 - `GET /turmas` - Lista todas as turmas
@@ -74,6 +74,82 @@ O projeto está organizado nos seguintes módulos:
 - `GET /turmas/{turma}/edit` - Formulário de edição
 - `PATCH /turmas/{turma}` - Atualizar turma
 - `DELETE /turmas/{turma}` - Excluir turma
+
+### 3. Módulo Professor
+
+**Responsabilidade:** Gerenciamento completo de professores
+
+**Localização:** `Modules/Professor/`
+
+**Componentes:**
+- **Model:** `Modules\Professor\Models\Professor`
+- **Controller:** `Modules\Professor\Http\Controllers\ProfessorController`
+- **Views:** `Modules/Professor/resources/views/`
+- **Routes:** `Modules/Professor/routes/web.php`
+- **Migrations:** `Modules/Professor/database/migrations/`
+
+**Funcionalidades:**
+- CRUD completo de professores
+- Validação de dados (CPF, email, registro profissional)
+- Gerenciamento de especialidade e formação
+- Controle de status (ativo, inativo, afastado, aposentado)
+- Relacionamento com turmas e disciplinas
+- Informações pessoais, contato e endereço profissional
+
+**Campos Principais:**
+- Dados pessoais: nome, CPF, RG, data de nascimento
+- Contato: email, telefone, celular
+- Endereço completo
+- Dados profissionais: especialidade, formação, registro profissional
+- Data de admissão e status
+
+**Rotas:**
+- `GET /professores` - Lista todos os professores
+- `GET /professores/create` - Formulário de criação
+- `POST /professores` - Salvar novo professor
+- `GET /professores/{professor}` - Visualizar professor
+- `GET /professores/{professor}/edit` - Formulário de edição
+- `PATCH /professores/{professor}` - Atualizar professor
+- `DELETE /professores/{professor}` - Excluir professor
+
+### 4. Módulo Disciplina
+
+**Responsabilidade:** Gerenciamento de disciplinas/matérias
+
+**Localização:** `Modules/Disciplina/`
+
+**Componentes:**
+- **Model:** `Modules\Disciplina\Models\Disciplina`
+- **Controller:** `Modules\Disciplina\Http\Controllers\DisciplinaController`
+- **Views:** `Modules/Disciplina/resources/views/`
+- **Routes:** `Modules/Disciplina/routes/web.php`
+- **Migrations:** `Modules/Disciplina/database/migrations/`
+
+**Funcionalidades:**
+- CRUD completo de disciplinas
+- Validação de código único
+- Gerenciamento de carga horária e créditos
+- Controle de ementa
+- Relacionamento com professores e turmas
+- Status ativo/inativo
+
+**Campos Principais:**
+- nome: Nome da disciplina
+- codigo: Código único identificador
+- descricao: Descrição da disciplina
+- carga_horaria: Carga horária total
+- creditos: Número de créditos
+- ementa: Conteúdo programático
+- ativo: Status da disciplina
+
+**Rotas:**
+- `GET /disciplinas` - Lista todas as disciplinas
+- `GET /disciplinas/create` - Formulário de criação
+- `POST /disciplinas` - Salvar nova disciplina
+- `GET /disciplinas/{disciplina}` - Visualizar disciplina
+- `GET /disciplinas/{disciplina}/edit` - Formulário de edição
+- `PATCH /disciplinas/{disciplina}` - Atualizar disciplina
+- `DELETE /disciplinas/{disciplina}` - Excluir disciplina
 
 ## Estrutura de um Módulo
 
@@ -138,6 +214,135 @@ public function alunos(): HasMany
 {
     return $this->hasMany(Aluno::class);
 }
+```
+
+### Professor ↔ Turma
+
+- Um **Professor** pode lecionar em muitas **Turmas** (BelongsToMany)
+- Uma **Turma** pode ter muitos **Professores** (BelongsToMany)
+- Tabela pivot: `professor_turma`
+
+**Implementação:**
+
+```php
+// Modules/Professor/Models/Professor.php
+use Modules\Turma\Models\Turma;
+
+public function turmas(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Turma::class,
+        'professor_turma',
+        'professor_id',
+        'turma_id'
+    )->withTimestamps();
+}
+
+// Modules/Turma/Models/Turma.php
+use Modules\Professor\Models\Professor;
+
+public function professores(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Professor::class,
+        'professor_turma',
+        'turma_id',
+        'professor_id'
+    )->withTimestamps();
+}
+```
+
+### Professor ↔ Disciplina
+
+- Um **Professor** pode lecionar muitas **Disciplinas** (BelongsToMany)
+- Uma **Disciplina** pode ser lecionada por muitos **Professores** (BelongsToMany)
+- Tabela pivot: `disciplina_professor`
+
+**Implementação:**
+
+```php
+// Modules/Professor/Models/Professor.php
+use Modules\Disciplina\Models\Disciplina;
+
+public function disciplinas(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Disciplina::class,
+        'disciplina_professor',
+        'professor_id',
+        'disciplina_id'
+    )->withTimestamps();
+}
+
+// Modules/Disciplina/Models/Disciplina.php
+use Modules\Professor\Models\Professor;
+
+public function professores(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Professor::class,
+        'disciplina_professor',
+        'disciplina_id',
+        'professor_id'
+    )->withTimestamps();
+}
+```
+
+### Disciplina ↔ Turma
+
+- Uma **Disciplina** pode ser oferecida em muitas **Turmas** (BelongsToMany)
+- Uma **Turma** pode ter muitas **Disciplinas** (BelongsToMany)
+- Tabela pivot: `disciplina_turma`
+
+**Implementação:**
+
+```php
+// Modules/Disciplina/Models/Disciplina.php
+use Modules\Turma\Models\Turma;
+
+public function turmas(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Turma::class,
+        'disciplina_turma',
+        'disciplina_id',
+        'turma_id'
+    )->withTimestamps();
+}
+
+// Modules/Turma/Models/Turma.php
+use Modules\Disciplina\Models\Disciplina;
+
+public function disciplinas(): BelongsToMany
+{
+    return $this->belongsToMany(
+        Disciplina::class,
+        'disciplina_turma',
+        'turma_id',
+        'disciplina_id'
+    )->withTimestamps();
+}
+```
+
+### Diagrama de Relacionamentos
+
+```
+┌─────────┐          ┌────────┐          ┌────────────┐
+│  Aluno  │──────────│ Turma  │──────────│ Professor  │
+└─────────┘          └────────┘          └────────────┘
+  BelongsTo             │                      │
+                   HasMany                 BelongsToMany
+                        │                      │
+                        └──────────────────────┘
+                                │
+                                │ BelongsToMany
+                                │
+                         ┌─────────────┐
+                         │ Disciplina  │
+                         └─────────────┘
+                         BelongsToMany
+                                │
+                                └──> Professor
 ```
 
 ## Convenções e Boas Práticas

@@ -28,7 +28,19 @@ O projeto utiliza **nwidart/laravel-modules** para implementar uma arquitetura m
 - Gerenciamento completo de turmas
 - Controle de vagas
 - Gerenciamento de períodos
-- Relacionamento com alunos
+- Relacionamento com alunos, professores e disciplinas
+
+#### 3. **Módulo Professor** (`Modules/Professor/`)
+- Gerenciamento completo de professores
+- Dados profissionais e acadêmicos
+- Relacionamento com turmas e disciplinas
+- Controle de status (ativo, inativo, afastado, aposentado)
+
+#### 4. **Módulo Disciplina** (`Modules/Disciplina/`)
+- Gestão de disciplinas/matérias
+- Carga horária e créditos
+- Ementa e conteúdo programático
+- Relacionamento com professores e turmas
 
 Para mais detalhes sobre a arquitetura modular, consulte [MODULES.md](MODULES.md).
 
@@ -278,9 +290,9 @@ Este projeto é resultado da migração do sistema legado `zend_sdewEducation`. 
 - [x] Arquitetura modular com nwidart/laravel-modules
 - [x] Módulo de Alunos
 - [x] Módulo de Turmas
-- [ ] Módulo de Professores
+- [x] Módulo de Professores
+- [x] Gestão de Disciplinas
 - [ ] Sistema de Notas e Avaliações
-- [ ] Gestão de Disciplinas
 - [ ] Sistema de Frequência
 - [ ] Relatórios e Dashboards
 - [ ] API completa para integração
