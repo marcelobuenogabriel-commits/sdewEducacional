@@ -292,9 +292,10 @@ Este projeto é resultado da migração do sistema legado `zend_sdewEducation`. 
 - [x] Módulo de Turmas
 - [x] Módulo de Professores
 - [x] Gestão de Disciplinas
-- [ ] Sistema de Notas e Avaliações
-- [ ] Sistema de Frequência
+- [x] Sistema de Notas e Avaliações
+- [x] Sistema de Frequência
 - [ ] Relatórios e Dashboards
+- [ ] Sistema de Comunicação
 - [ ] API completa para integração
 - [ ] Aplicativo mobile
 
