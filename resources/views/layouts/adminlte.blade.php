@@ -76,10 +76,23 @@
             // Initialize popovers
             $('[data-toggle="popover"]').popover();
             
-            // Auto-hide alerts after 5 seconds
-            setTimeout(function() {
-                $('.alert').fadeOut('slow');
-            }, 5000);
+            // Auto-hide alerts with configurable timeout (default 5 seconds)
+            $('.alert').each(function() {
+                var $alert = $(this);
+                var timeout = $alert.data('alert-timeout') || 5000;
+                
+                // Add close button if not present
+                if (!$alert.find('.close').length) {
+                    $alert.prepend('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                }
+                
+                // Auto-hide only if not being hovered
+                setTimeout(function() {
+                    if (!$alert.is(':hover')) {
+                        $alert.fadeOut('slow');
+                    }
+                }, timeout);
+            });
         });
     </script>
     @yield('extra_js')

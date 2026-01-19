@@ -8,10 +8,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    $totalAlunos = \Modules\Aluno\Models\Aluno::count();
+    $alunosAtivos = \Modules\Aluno\Models\Aluno::where('status', 'ativo')->count();
+    
     $stats = [
-        'total_alunos' => \Modules\Aluno\Models\Aluno::count(),
+        'total_alunos' => $totalAlunos,
         'total_turmas' => \Modules\Turma\Models\Turma::count(),
-        'alunos_ativos' => \Modules\Aluno\Models\Aluno::where('status', 'ativo')->count(),
+        'alunos_ativos' => $alunosAtivos,
+        'percentual_ativos' => $totalAlunos > 0 ? round($alunosAtivos / $totalAlunos * 100) : 0,
     ];
     
     return view('dashboard', compact('stats'));

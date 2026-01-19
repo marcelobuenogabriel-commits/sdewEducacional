@@ -52,7 +52,7 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="small-box-footer">
-                    {{ $stats['total_alunos'] > 0 ? round($stats['alunos_ativos'] / $stats['total_alunos'] * 100) : 0 }}% do total
+                    {{ $stats['percentual_ativos'] }}% do total
                 </div>
             </div>
         </div>
