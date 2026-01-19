@@ -8,5 +8,6 @@
     "Frequencia": true,
     "Relatorio": true,
     "Comunicacao": true,
-    "Financeiro": true
+    "Financeiro": true,
+    "Matricula": true
 }
