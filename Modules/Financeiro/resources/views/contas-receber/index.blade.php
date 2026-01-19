@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Disciplinas')
+@section('title', 'Contas a Receber')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-book"></i> Disciplinas</h1>
-        <a href="{{ route('disciplinas.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nova Disciplina
+        <h1><i class="fas fa-money-bill-wave"></i> Contas a Receber</h1>
+        <a href="{{ route('financeiro.contas-receber.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nova Conta
         </a>
     </div>
 @stop
@@ -21,44 +21,46 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Lista de Disciplinas</h3>
+            <h3 class="card-title">Lista de Contas a Receber</h3>
         </div>
         <div class="card-body">
-            @if(isset($disciplinas) && $disciplinas->count() > 0)
+            @if(isset($contasReceber) && $contasReceber->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Código</th>
-                                <th>Nome</th>
-                                <th>Carga Horária</th>
-                                <th>Professor</th>
+                                <th>Descrição</th>
+                                <th>Cliente/Aluno</th>
+                                <th>Valor</th>
+                                <th>Vencimento</th>
                                 <th>Status</th>
                                 <th width="200">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($disciplinas as $disciplina)
+                            @foreach($contasReceber as $conta)
                                 <tr>
-                                    <td>{{ $disciplina->codigo }}</td>
-                                    <td>{{ $disciplina->nome }}</td>
-                                    <td>{{ $disciplina->carga_horaria }}h</td>
-                                    <td>{{ $disciplina->professor?->nome ?? '-' }}</td>
+                                    <td>{{ $conta->descricao ?? '-' }}</td>
+                                    <td>{{ $conta->cliente ?? '-' }}</td>
+                                    <td>R$ {{ number_format($conta->valor ?? 0, 2, ',', '.') }}</td>
+                                    <td>{{ $conta->data_vencimento?->format('d/m/Y') ?? '-' }}</td>
                                     <td>
-                                        @if($disciplina->ativo)
-                                            <span class="badge badge-success">Ativa</span>
+                                        @if($conta->recebido ?? false)
+                                            <span class="badge badge-success">Recebido</span>
+                                        @elseif($conta->data_vencimento < now())
+                                            <span class="badge badge-danger">Vencido</span>
                                         @else
-                                            <span class="badge badge-danger">Inativa</span>
+                                            <span class="badge badge-warning">Pendente</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('disciplinas.show', $disciplina) }}" class="btn btn-info btn-sm" title="Ver">
+                                        <a href="{{ route('financeiro.contas-receber.show', $conta) }}" class="btn btn-info btn-sm" title="Ver">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('disciplinas.edit', $disciplina) }}" class="btn btn-warning btn-sm" title="Editar">
+                                        <a href="{{ route('financeiro.contas-receber.edit', $conta) }}" class="btn btn-warning btn-sm" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('disciplinas.destroy', $disciplina) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?');">
+                                        <form action="{{ route('financeiro.contas-receber.destroy', $conta) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Tem certeza?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
@@ -72,10 +74,10 @@
                     </table>
                 </div>
                 <div class="mt-3">
-                    {{ $disciplinas->links() }}
+                    {{ $contasReceber->links() }}
                 </div>
             @else
-                <p class="text-muted">Nenhuma disciplina cadastrada.</p>
+                <p class="text-muted">Nenhuma conta a receber cadastrada.</p>
             @endif
         </div>
     </div>

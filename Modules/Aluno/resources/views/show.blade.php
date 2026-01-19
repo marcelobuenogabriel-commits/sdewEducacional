@@ -1,160 +1,174 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Detalhes do Aluno') }}
-            </h2>
-            <div class="flex gap-2">
-                <a href="{{ route('alunos.edit', $aluno) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Editar
-                </a>
-                <a href="{{ route('alunos.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    Voltar
-                </a>
-            </div>
+@extends('adminlte::page')
+
+@section('title', 'Detalhes do Aluno')
+
+@section('content_header')
+    <div class="d-flex justify-content-between align-items-center">
+        <h1><i class="fas fa-user-graduate"></i> Detalhes do Aluno</h1>
+        <div>
+            <a href="{{ route('alunos.edit', $aluno) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a href="{{ route('alunos.index') }}" class="btn btn-default">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
         </div>
-    </x-slot>
+    </div>
+@stop
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <!-- Informações Pessoais -->
-                    <div class="mb-8">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Informações Pessoais</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Nome Completo</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->nome }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Matrícula</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->matricula }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">CPF</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->cpf }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">RG</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->rg ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Data de Nascimento</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->data_nascimento?->format('d/m/Y') ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Status</p>
-                                <p class="mt-1">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        @if($aluno->status === 'ativo') bg-green-100 text-green-800
-                                        @elseif($aluno->status === 'trancado') bg-yellow-100 text-yellow-800
-                                        @elseif($aluno->status === 'concluido') bg-blue-100 text-blue-800
-                                        @else bg-red-100 text-red-800
-                                        @endif">
-                                        {{ ucfirst($aluno->status) }}
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Informações de Contato -->
-                    <div class="mb-8">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Informações de Contato</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Email</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->email }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Telefone</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->telefone ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Celular</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->celular ?? '-' }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Endereço -->
-                    <div class="mb-8">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Endereço</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="col-span-2">
-                                <p class="text-sm font-medium text-gray-500">Endereço</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->endereco ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Número</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->numero ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Complemento</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->complemento ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Bairro</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->bairro ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Cidade</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->cidade ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Estado</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->estado ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">CEP</p>
-                                <p class="mt-1 text-gray-900">{{ $aluno->cep ?? '-' }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Informações Acadêmicas -->
-                    <div class="mb-8">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Informações Acadêmicas</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Turma</p>
-                                <p class="mt-1 text-gray-900">
-                                    @if($aluno->turma)
-                                        <a href="{{ route('turmas.show', $aluno->turma) }}" class="text-blue-600 hover:text-blue-900">
-                                            {{ $aluno->turma->nome }} ({{ $aluno->turma->codigo }})
-                                        </a>
-                                    @else
-                                        -
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Observações -->
-                    @if($aluno->observacoes)
-                        <div class="mb-8">
-                            <h3 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Observações</h3>
-                            <p class="text-gray-900 whitespace-pre-line">{{ $aluno->observacoes }}</p>
-                        </div>
-                    @endif
-
-                    <!-- Informações do Sistema -->
-                    <div class="mt-8 pt-6 border-t">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Cadastrado em</p>
-                                <p class="mt-1 text-gray-900 text-sm">{{ $aluno->created_at->format('d/m/Y H:i') }}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Última atualização</p>
-                                <p class="mt-1 text-gray-900 text-sm">{{ $aluno->updated_at->format('d/m/Y H:i') }}</p>
-                            </div>
-                        </div>
-                    </div>
+@section('content')
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-info-circle"></i> Informações Pessoais</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong><i class="fas fa-user"></i> Nome Completo</strong>
+                    <p class="text-muted">{{ $aluno->nome }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-id-card"></i> Matrícula</strong>
+                    <p class="text-muted">{{ $aluno->matricula }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-id-card"></i> CPF</strong>
+                    <p class="text-muted">{{ $aluno->cpf }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-id-card"></i> RG</strong>
+                    <p class="text-muted">{{ $aluno->rg ?? '-' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-birthday-cake"></i> Data de Nascimento</strong>
+                    <p class="text-muted">{{ $aluno->data_nascimento?->format('d/m/Y') ?? '-' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-flag"></i> Status</strong>
+                    <p>
+                        @if($aluno->status === 'ativo')
+                            <span class="badge badge-success">Ativo</span>
+                        @elseif($aluno->status === 'trancado')
+                            <span class="badge badge-warning">Trancado</span>
+                        @elseif($aluno->status === 'concluido')
+                            <span class="badge badge-info">Concluído</span>
+                        @else
+                            <span class="badge badge-danger">Inativo</span>
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-envelope"></i> Informações de Contato</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong><i class="fas fa-envelope"></i> Email</strong>
+                    <p class="text-muted">{{ $aluno->email }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-phone"></i> Telefone</strong>
+                    <p class="text-muted">{{ $aluno->telefone ?? '-' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-mobile-alt"></i> Celular</strong>
+                    <p class="text-muted">{{ $aluno->celular ?? '-' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong><i class="fas fa-road"></i> Endereço</strong>
+                    <p class="text-muted">{{ $aluno->endereco ?? '-' }}</p>
+                </div>
+                <div class="col-md-2">
+                    <strong>Número</strong>
+                    <p class="text-muted">{{ $aluno->numero ?? '-' }}</p>
+                </div>
+                <div class="col-md-2">
+                    <strong>Complemento</strong>
+                    <p class="text-muted">{{ $aluno->complemento ?? '-' }}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Bairro</strong>
+                    <p class="text-muted">{{ $aluno->bairro ?? '-' }}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-city"></i> Cidade</strong>
+                    <p class="text-muted">{{ $aluno->cidade ?? '-' }}</p>
+                </div>
+                <div class="col-md-2">
+                    <strong>Estado</strong>
+                    <p class="text-muted">{{ $aluno->estado ?? '-' }}</p>
+                </div>
+                <div class="col-md-2">
+                    <strong>CEP</strong>
+                    <p class="text-muted">{{ $aluno->cep ?? '-' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-graduation-cap"></i> Informações Acadêmicas</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong><i class="fas fa-users"></i> Turma</strong>
+                    <p class="text-muted">
+                        @if($aluno->turma)
+                            <a href="{{ route('turmas.show', $aluno->turma) }}" class="text-primary">
+                                {{ $aluno->turma->nome }} ({{ $aluno->turma->codigo }})
+                            </a>
+                        @else
+                            -
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if($aluno->observacoes)
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-sticky-note"></i> Observações</h3>
+            </div>
+            <div class="card-body">
+                <p style="white-space: pre-line;">{{ $aluno->observacoes }}</p>
+            </div>
+        </div>
+    @endif
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-clock"></i> Informações do Sistema</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Cadastrado em</strong>
+                    <p class="text-muted">{{ $aluno->created_at->format('d/m/Y H:i') }}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Última atualização</strong>
+                    <p class="text-muted">{{ $aluno->updated_at->format('d/m/Y H:i') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+@stop

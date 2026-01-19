@@ -1,88 +1,60 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar Turma') }}
-        </h2>
-    </x-slot>
+@extends('adminlte::page')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('turmas.update', $turma) }}">
-                        @csrf
-                        @method('PATCH')
+@section('title', 'Editar Turma')
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Nome -->
-                            <div class="col-span-2">
-                                <x-input-label for="nome" :value="__('Nome da Turma')" />
-                                <x-text-input id="nome" class="block mt-1 w-full" type="text" name="nome" :value="old('nome', $turma->nome)" required autofocus placeholder="Ex: 3º Ano A" />
-                                <x-input-error :messages="$errors->get('nome')" class="mt-2" />
-                            </div>
+@section('content_header')
+    <h1><i class="fas fa-users"></i> Editar Turma</h1>
+@stop
 
-                            <!-- Código -->
-                            <div>
-                                <x-input-label for="codigo" :value="__('Código')" />
-                                <x-text-input id="codigo" class="block mt-1 w-full" type="text" name="codigo" :value="old('codigo', $turma->codigo)" required placeholder="Ex: 3A-2026" />
-                                <x-input-error :messages="$errors->get('codigo')" class="mt-2" />
-                                <p class="mt-1 text-sm text-gray-500">Código único para identificação da turma</p>
-                            </div>
-
-                            <!-- Ano -->
-                            <div>
-                                <x-input-label for="ano" :value="__('Ano Letivo')" />
-                                <x-text-input id="ano" class="block mt-1 w-full" type="number" name="ano" :value="old('ano', $turma->ano)" required min="2000" max="2100" />
-                                <x-input-error :messages="$errors->get('ano')" class="mt-2" />
-                            </div>
-
-                            <!-- Período -->
-                            <div>
-                                <x-input-label for="periodo" :value="__('Período')" />
-                                <select id="periodo" name="periodo" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                    <option value="">Selecione o período</option>
-                                    <option value="matutino" {{ old('periodo', $turma->periodo) == 'matutino' ? 'selected' : '' }}>Matutino</option>
-                                    <option value="vespertino" {{ old('periodo', $turma->periodo) == 'vespertino' ? 'selected' : '' }}>Vespertino</option>
-                                    <option value="noturno" {{ old('periodo', $turma->periodo) == 'noturno' ? 'selected' : '' }}>Noturno</option>
-                                    <option value="integral" {{ old('periodo', $turma->periodo) == 'integral' ? 'selected' : '' }}>Integral</option>
-                                </select>
-                                <x-input-error :messages="$errors->get('periodo')" class="mt-2" />
-                            </div>
-
-                            <!-- Vagas Total -->
-                            <div>
-                                <x-input-label for="vagas_total" :value="__('Total de Vagas')" />
-                                <x-text-input id="vagas_total" class="block mt-1 w-full" type="number" name="vagas_total" :value="old('vagas_total', $turma->vagas_total)" required min="1" />
-                                <x-input-error :messages="$errors->get('vagas_total')" class="mt-2" />
-                            </div>
-
-                            <!-- Status Ativo -->
-                            <div class="flex items-center">
-                                <input id="ativo" name="ativo" type="checkbox" value="1" {{ old('ativo', $turma->ativo) ? 'checked' : '' }} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                <label for="ativo" class="ml-2 block text-sm text-gray-900">
-                                    Turma Ativa
-                                </label>
-                            </div>
-
-                            <!-- Descrição -->
-                            <div class="col-span-2">
-                                <x-input-label for="descricao" :value="__('Descrição')" />
-                                <textarea id="descricao" name="descricao" rows="3" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Informações adicionais sobre a turma">{{ old('descricao', $turma->descricao) }}</textarea>
-                                <x-input-error :messages="$errors->get('descricao')" class="mt-2" />
-                            </div>
+@section('content')
+    <div class="card">
+        <form method="POST" action="{{ route('turmas.update', $turma) }}">
+            @csrf
+            @method('PATCH')
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="nome">Nome da Turma <span class="text-danger">*</span></label>
+                        <input id="nome" class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" value="{{ old('nome', $turma->nome) }}" required>
+                        @error('nome')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="codigo">Código <span class="text-danger">*</span></label>
+                        <input id="codigo" class="form-control @error('codigo') is-invalid @enderror" type="text" name="codigo" value="{{ old('codigo', $turma->codigo) }}" required>
+                        @error('codigo')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="ano">Ano Letivo <span class="text-danger">*</span></label>
+                        <input id="ano" class="form-control @error('ano') is-invalid @enderror" type="number" name="ano" value="{{ old('ano', $turma->ano) }}" required min="2000" max="2100">
+                        @error('ano')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="periodo">Período <span class="text-danger">*</span></label>
+                        <select id="periodo" name="periodo" class="form-control @error('periodo') is-invalid @enderror" required>
+                            <option value="matutino" {{ old('periodo', $turma->periodo) == 'matutino' ? 'selected' : '' }}>Matutino</option>
+                            <option value="vespertino" {{ old('periodo', $turma->periodo) == 'vespertino' ? 'selected' : '' }}>Vespertino</option>
+                            <option value="noturno" {{ old('periodo', $turma->periodo) == 'noturno' ? 'selected' : '' }}>Noturno</option>
+                            <option value="integral" {{ old('periodo', $turma->periodo) == 'integral' ? 'selected' : '' }}>Integral</option>
+                        </select>
+                        @error('periodo')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="vagas_total">Total de Vagas <span class="text-danger">*</span></label>
+                        <input id="vagas_total" class="form-control @error('vagas_total') is-invalid @enderror" type="number" name="vagas_total" value="{{ old('vagas_total', $turma->vagas_total) }}" required min="1">
+                        @error('vagas_total')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="ativo" name="ativo" value="1" {{ old('ativo', $turma->ativo) ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="ativo">Turma Ativa</label>
                         </div>
-
-                        <div class="flex items-center justify-end mt-6 gap-4">
-                            <a href="{{ route('turmas.index') }}" class="text-gray-600 hover:text-gray-900">
-                                Cancelar
-                            </a>
-                            <x-primary-button>
-                                {{ __('Atualizar Turma') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="card-footer">
+                <a href="{{ route('turmas.index') }}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Voltar</a>
+                <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Atualizar</button>
+            </div>
+        </form>
     </div>
-</x-app-layout>
+@stop
