@@ -1,0 +1,11 @@
+{
+    "name": "Relatorio",
+    "alias": "relatorio",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Relatorio\\Providers\\RelatorioServiceProvider"
+    ],
+    "files": []
+}
