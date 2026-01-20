@@ -5,6 +5,7 @@ namespace Modules\Aluno\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Turma\Models\Turma;
 
 class Aluno extends Model
@@ -63,7 +64,7 @@ class Aluno extends Model
     /**
      * Get the turmas through matriculas.
      */
-    public function turmas()
+    public function turmas(): HasManyThrough
     {
         return $this->hasManyThrough(
             Turma::class,
