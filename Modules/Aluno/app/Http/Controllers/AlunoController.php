@@ -14,7 +14,7 @@ class AlunoController extends Controller
      */
     public function index()
     {
-        $alunos = Aluno::with('turma')->paginate(15);
+        $alunos = Aluno::with('empresa')->paginate(15);
         return view('aluno::index', compact('alunos'));
     }
 
@@ -23,8 +23,8 @@ class AlunoController extends Controller
      */
     public function create()
     {
-        $turmas = Turma::where('ativo', true)->get();
-        return view('aluno::create', compact('turmas'));
+        $empresas = \App\Models\Empresa::where('status', 'ativa')->get();
+        return view('aluno::create', compact('empresas'));
     }
 
     /**
@@ -34,10 +34,19 @@ class AlunoController extends Controller
     {
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:14|unique:alunos',
+            'cpf' => [
+                'nullable',
+                'string',
+                'max:14',
+                function ($attribute, $value, $fail) {
+                    if ($value && Aluno::where('cpf', $value)->exists()) {
+                        $fail('O CPF informado já está cadastrado.');
+                    }
+                },
+            ],
             'rg' => 'nullable|string|max:20',
             'data_nascimento' => 'required|date',
-            'email' => 'required|email|unique:alunos',
+            'email' => 'nullable|email',
             'telefone' => 'nullable|string|max:20',
             'celular' => 'nullable|string|max:20',
             'endereco' => 'nullable|string',
@@ -47,10 +56,25 @@ class AlunoController extends Controller
             'cidade' => 'nullable|string',
             'estado' => 'nullable|string|max:2',
             'cep' => 'nullable|string|max:10',
-            'turma_id' => 'nullable|exists:turmas,id',
-            'matricula' => 'required|string|unique:alunos',
+            'empresa_id' => 'nullable|exists:empresas,id',
             'observacoes' => 'nullable|string',
         ]);
+
+        // Auto-generate matricula
+        $year = date('Y');
+        $lastMatricula = Aluno::whereYear('created_at', $year)
+            ->whereNotNull('matricula')
+            ->orderBy('matricula', 'desc')
+            ->value('matricula');
+        
+        if ($lastMatricula) {
+            $lastNumber = (int) substr($lastMatricula, -4);
+            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $newNumber = '0001';
+        }
+        
+        $validated['matricula'] = $year . $newNumber;
 
         Aluno::create($validated);
 
@@ -62,7 +86,7 @@ class AlunoController extends Controller
      */
     public function show(Aluno $aluno)
     {
-        $aluno->load('turma');
+        $aluno->load(['empresa', 'matriculas.turma']);
         return view('aluno::show', compact('aluno'));
     }
 
@@ -71,8 +95,8 @@ class AlunoController extends Controller
      */
     public function edit(Aluno $aluno)
     {
-        $turmas = Turma::where('ativo', true)->get();
-        return view('aluno::edit', compact('aluno', 'turmas'));
+        $empresas = \App\Models\Empresa::where('status', 'ativa')->get();
+        return view('aluno::edit', compact('aluno', 'empresas'));
     }
 
     /**
@@ -82,10 +106,19 @@ class AlunoController extends Controller
     {
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:14|unique:alunos,cpf,' . $aluno->id,
+            'cpf' => [
+                'nullable',
+                'string',
+                'max:14',
+                function ($attribute, $value, $fail) use ($aluno) {
+                    if ($value && Aluno::where('cpf', $value)->where('id', '!=', $aluno->id)->exists()) {
+                        $fail('O CPF informado já está cadastrado.');
+                    }
+                },
+            ],
             'rg' => 'nullable|string|max:20',
             'data_nascimento' => 'required|date',
-            'email' => 'required|email|unique:alunos,email,' . $aluno->id,
+            'email' => 'nullable|email',
             'telefone' => 'nullable|string|max:20',
             'celular' => 'nullable|string|max:20',
             'endereco' => 'nullable|string',
@@ -95,8 +128,7 @@ class AlunoController extends Controller
             'cidade' => 'nullable|string',
             'estado' => 'nullable|string|max:2',
             'cep' => 'nullable|string|max:10',
-            'turma_id' => 'nullable|exists:turmas,id',
-            'matricula' => 'required|string|unique:alunos,matricula,' . $aluno->id,
+            'empresa_id' => 'nullable|exists:empresas,id',
             'status' => 'required|in:ativo,inativo,trancado,concluido',
             'observacoes' => 'nullable|string',
         ]);
