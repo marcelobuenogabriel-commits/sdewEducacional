@@ -29,6 +29,11 @@ Route::middleware('auth')->group(function () {
     
     // Empresa routes
     Route::resource('empresas', EmpresaController::class);
+    
+    // User management routes
+    Route::resource('users', \App\Http\Controllers\UserController::class);
+    Route::get('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'editPassword'])->name('users.change-password');
+    Route::put('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('users.update-password');
 });
 
 require __DIR__.'/auth.php';
