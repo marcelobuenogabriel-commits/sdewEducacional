@@ -391,17 +391,17 @@ return [
             'submenu' => [
                 [
                     'text' => 'Contas a Pagar',
-                    'route' => 'contas-pagar.index',
+                    'route' => 'financeiro.contas-pagar.index',
                     'icon' => 'fas fa-fw fa-money-bill-wave',
                 ],
                 [
                     'text' => 'Contas a Receber',
-                    'route' => 'contas-receber.index',
+                    'route' => 'financeiro.contas-receber.index',
                     'icon' => 'fas fa-fw fa-hand-holding-usd',
                 ],
                 [
                     'text' => 'Conciliação Bancária',
-                    'route' => 'conciliacoes-bancarias.index',
+                    'route' => 'financeiro.conciliacoes-bancarias.index',
                     'icon' => 'fas fa-fw fa-university',
                 ],
             ],
