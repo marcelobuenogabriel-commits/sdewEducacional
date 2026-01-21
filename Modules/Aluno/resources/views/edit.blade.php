@@ -32,8 +32,8 @@
 
                             <!-- CPF -->
                             <div class="col-md-6 form-group">
-                                <label for="cpf">CPF <span class="text-danger">*</span></label>
-                                <input id="cpf" class="form-control @error('cpf') is-invalid @enderror" type="text" name="cpf" value="{{ old('cpf', $aluno->cpf) }}" required placeholder="000.000.000-00">
+                                <label for="cpf">CPF</label>
+                                <input id="cpf" class="form-control @error('cpf') is-invalid @enderror" type="text" name="cpf" value="{{ old('cpf', $aluno->cpf) }}" placeholder="000.000.000-00">
                                 @error('cpf')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -57,19 +57,17 @@
                                 @enderror
                             </div>
 
-                            <!-- Matrícula -->
+                            <!-- Matrícula (Read-only) -->
                             <div class="col-md-6 form-group">
-                                <label for="matricula">Matrícula <span class="text-danger">*</span></label>
-                                <input id="matricula" class="form-control @error('matricula') is-invalid @enderror" type="text" name="matricula" value="{{ old('matricula', $aluno->matricula) }}" required>
-                                @error('matricula')
-                                    <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
+                                <label for="matricula">Matrícula</label>
+                                <input id="matricula" class="form-control" type="text" value="{{ $aluno->matricula }}" disabled>
+                                <small class="form-text text-muted">A matrícula não pode ser alterada</small>
                             </div>
 
                             <!-- Email -->
                             <div class="col-md-6 form-group">
-                                <label for="email">Email <span class="text-danger">*</span></label>
-                                <input id="email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email', $aluno->email) }}" required>
+                                <label for="email">Email</label>
+                                <input id="email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email', $aluno->email) }}">
                                 @error('email')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -93,18 +91,18 @@
                                 @enderror
                             </div>
 
-                            <!-- Turma -->
+                            <!-- Empresa -->
                             <div class="col-md-6 form-group">
-                                <label for="turma_id">Turma</label>
-                                <select id="turma_id" name="turma_id" class="form-control @error('turma_id') is-invalid @enderror">
-                                    <option value="">Selecione uma turma</option>
-                                    @foreach($turmas as $turma)
-                                        <option value="{{ $turma->id }}" {{ old('turma_id', $aluno->turma_id) == $turma->id ? 'selected' : '' }}>
-                                            {{ $turma->nome }} - {{ $turma->codigo }}
+                                <label for="empresa_id">Empresa</label>
+                                <select id="empresa_id" name="empresa_id" class="form-control @error('empresa_id') is-invalid @enderror">
+                                    <option value="">Selecione uma empresa</option>
+                                    @foreach($empresas as $empresa)
+                                        <option value="{{ $empresa->id }}" {{ old('empresa_id', $aluno->empresa_id) == $empresa->id ? 'selected' : '' }}>
+                                            {{ $empresa->nome }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('turma_id')
+                                @error('empresa_id')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -123,9 +121,18 @@
                                 @enderror
                             </div>
 
+                            <!-- CEP -->
+                            <div class="col-md-4 form-group">
+                                <label for="cep">CEP</label>
+                                <input id="cep" class="form-control @error('cep') is-invalid @enderror" type="text" name="cep" value="{{ old('cep', $aluno->cep) }}" placeholder="00000-000">
+                                @error('cep')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                             <!-- Endereço -->
                             <div class="col-md-12 form-group">
-                                <label for="endereco">Endereço</label>
+                                <label for="endereco">Endereço (Rua/Logradouro)</label>
                                 <input id="endereco" class="form-control @error('endereco') is-invalid @enderror" type="text" name="endereco" value="{{ old('endereco', $aluno->endereco) }}">
                                 @error('endereco')
                                     <span class="invalid-feedback">{{ $message }}</span>
@@ -160,7 +167,7 @@
                             </div>
 
                             <!-- Cidade -->
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-8 form-group">
                                 <label for="cidade">Cidade</label>
                                 <input id="cidade" class="form-control @error('cidade') is-invalid @enderror" type="text" name="cidade" value="{{ old('cidade', $aluno->cidade) }}">
                                 @error('cidade')
@@ -173,15 +180,6 @@
                                 <label for="estado">Estado (UF)</label>
                                 <input id="estado" class="form-control @error('estado') is-invalid @enderror" type="text" name="estado" value="{{ old('estado', $aluno->estado) }}" maxlength="2" placeholder="SP">
                                 @error('estado')
-                                    <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- CEP -->
-                            <div class="col-md-4 form-group">
-                                <label for="cep">CEP</label>
-                                <input id="cep" class="form-control @error('cep') is-invalid @enderror" type="text" name="cep" value="{{ old('cep', $aluno->cep) }}" placeholder="00000-000">
-                                @error('cep')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -209,5 +207,39 @@
 
             <script>
                 document.querySelector('form').id = 'edit-form';
+                
+                // CEP Integration with ViaCEP API
+                document.getElementById('cep').addEventListener('blur', function() {
+                    const cep = this.value.replace(/\D/g, '');
+                    
+                    if (cep.length === 8) {
+                        // Show loading state
+                        this.classList.add('is-loading');
+                        
+                        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (!data.erro) {
+                                    // Fill the address fields
+                                    document.getElementById('endereco').value = data.logradouro || '';
+                                    document.getElementById('bairro').value = data.bairro || '';
+                                    document.getElementById('cidade').value = data.localidade || '';
+                                    document.getElementById('estado').value = data.uf || '';
+                                    
+                                    // Focus on number field
+                                    document.getElementById('numero').focus();
+                                } else {
+                                    alert('CEP não encontrado.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro ao buscar CEP:', error);
+                                alert('Erro ao buscar o CEP. Por favor, tente novamente.');
+                            })
+                            .finally(() => {
+                                this.classList.remove('is-loading');
+                            });
+                    }
+                });
             </script>
 @stop

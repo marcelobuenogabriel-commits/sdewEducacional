@@ -361,6 +361,14 @@ return [
             'icon' => 'fas fa-fw fa-file-signature',
             'icon_color' => 'indigo',
         ],
+        
+        // Empresas
+        [
+            'text' => 'Empresas',
+            'route' => 'empresas.index',
+            'icon' => 'fas fa-fw fa-building',
+            'icon_color' => 'info',
+        ],
 
         // Avaliação e Frequência
         ['header' => 'AVALIAÇÃO E FREQUÊNCIA'],
@@ -428,6 +436,13 @@ return [
 
         // Configurações
         ['header' => 'CONTA'],
+        
+        [
+            'text' => 'Gerenciar Usuários',
+            'route' => 'users.index',
+            'icon' => 'fas fa-fw fa-users-cog',
+            'icon_color' => 'danger',
+        ],
         
         [
             'text' => 'Meu Perfil',

@@ -5,6 +5,7 @@ namespace Modules\Aluno\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Turma\Models\Turma;
 
 class Aluno extends Model
@@ -29,7 +30,7 @@ class Aluno extends Model
         'cidade',
         'estado',
         'cep',
-        'turma_id',
+        'empresa_id',
         'matricula',
         'status',
         'observacoes',
@@ -45,11 +46,34 @@ class Aluno extends Model
     ];
 
     /**
-     * Get the turma that owns the aluno.
+     * Get the empresa that owns the aluno.
      */
-    public function turma(): BelongsTo
+    public function empresa(): BelongsTo
     {
-        return $this->belongsTo(Turma::class);
+        return $this->belongsTo(\App\Models\Empresa::class);
+    }
+
+    /**
+     * Get the matriculas for the aluno.
+     */
+    public function matriculas(): HasMany
+    {
+        return $this->hasMany(\Modules\Matricula\Models\Matricula::class);
+    }
+
+    /**
+     * Get the turmas through matriculas.
+     */
+    public function turmas(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Turma::class,
+            \Modules\Matricula\Models\Matricula::class,
+            'aluno_id',
+            'id',
+            'id',
+            'turma_id'
+        );
     }
 
     /**
