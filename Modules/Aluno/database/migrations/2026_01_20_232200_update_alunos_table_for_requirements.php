@@ -45,7 +45,7 @@ return new class extends Migration
     {
         Schema::table('alunos', function (Blueprint $table) {
             // Drop the unique index
-            $table->dropUnique(['cpf']);
+            $table->dropIndex('alunos_cpf_unique');
             
             // Restore original constraints
             $table->string('cpf', 14)->unique()->change();
