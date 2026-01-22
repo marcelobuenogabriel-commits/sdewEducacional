@@ -16,7 +16,7 @@
             <h3 class="card-title">Cadastrar Novo Aluno</h3>
         </div>
         <div class="card-body">
-                    <form method="POST" action="{{ route('alunos.store') }}">
+                    <form id="create-form" method="POST" action="{{ route('alunos.store') }}">
                         @csrf
 
                         <div class="row">

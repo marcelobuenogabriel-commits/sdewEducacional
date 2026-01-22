@@ -16,7 +16,7 @@
             <h3 class="card-title">Editar Informações do Aluno</h3>
         </div>
         <div class="card-body">
-                    <form method="POST" action="{{ route('alunos.update', $aluno) }}">
+                    <form id="edit-form" method="POST" action="{{ route('alunos.update', $aluno) }}">
                         @csrf
                         @method('PATCH')
 
