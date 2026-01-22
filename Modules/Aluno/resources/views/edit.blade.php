@@ -193,20 +193,20 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="card-footer">
+                            <a href="{{ route('alunos.index') }}" class="btn btn-default">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary float-right">
+                                <i class="fas fa-save"></i> Atualizar Aluno
+                            </button>
+                        </div>
                     </form>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('alunos.index') }}" class="btn btn-default">
-                        <i class="fas fa-arrow-left"></i> Cancelar
-                    </a>
-                    <button type="submit" form="edit-form" class="btn btn-primary float-right">
-                        <i class="fas fa-save"></i> Atualizar Aluno
-                    </button>
                 </div>
             </div>
 
             <script>
-                document.querySelector('form').id = 'edit-form';
                 
                 // CEP Integration with ViaCEP API
                 document.getElementById('cep').addEventListener('blur', function() {
