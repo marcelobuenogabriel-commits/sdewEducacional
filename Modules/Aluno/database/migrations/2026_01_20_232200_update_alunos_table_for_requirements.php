@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -33,10 +32,10 @@ return new class extends Migration
             // Make matricula auto-increment (remove manual input requirement)
             // We'll generate it in the model/controller instead
             $table->string('matricula')->nullable()->change();
+            
+            // Add unique constraint for CPF (application logic will handle duplicates for non-null values)
+            $table->unique('cpf');
         });
-
-        // Create unique index for CPF where it's not null
-        DB::statement('CREATE UNIQUE INDEX alunos_cpf_unique ON alunos (cpf) WHERE cpf IS NOT NULL');
     }
 
     /**
@@ -45,8 +44,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('alunos', function (Blueprint $table) {
-            // Drop the conditional unique index
-            DB::statement('DROP INDEX IF EXISTS alunos_cpf_unique');
+            // Drop the unique index
+            $table->dropIndex('alunos_cpf_unique');
             
             // Restore original constraints
             $table->string('cpf', 14)->unique()->change();
