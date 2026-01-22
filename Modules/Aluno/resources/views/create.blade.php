@@ -16,7 +16,7 @@
             <h3 class="card-title">Cadastrar Novo Aluno</h3>
         </div>
         <div class="card-body">
-                    <form method="POST" action="{{ route('alunos.store') }}">
+                    <form id="create-form" method="POST" action="{{ route('alunos.store') }}">
                         @csrf
 
                         <div class="row">
@@ -171,20 +171,20 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="card-footer">
+                            <a href="{{ route('alunos.index') }}" class="btn btn-default">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success float-right">
+                                <i class="fas fa-save"></i> Cadastrar Aluno
+                            </button>
+                        </div>
                     </form>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('alunos.index') }}" class="btn btn-default">
-                        <i class="fas fa-arrow-left"></i> Cancelar
-                    </a>
-                    <button type="submit" form="create-form" class="btn btn-success float-right">
-                        <i class="fas fa-save"></i> Cadastrar Aluno
-                    </button>
                 </div>
             </div>
 
             <script>
-                document.querySelector('form').id = 'create-form';
                 
                 // CEP Integration with ViaCEP API
                 document.getElementById('cep').addEventListener('blur', function() {
