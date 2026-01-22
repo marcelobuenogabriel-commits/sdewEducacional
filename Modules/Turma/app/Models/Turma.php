@@ -4,10 +4,12 @@ namespace Modules\Turma\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Aluno\Models\Aluno;
 use Modules\Professor\Models\Professor;
 use Modules\Disciplina\Models\Disciplina;
+use Modules\Matricula\Models\Matricula;
 
 class Turma extends Model
 {
@@ -40,11 +42,26 @@ class Turma extends Model
     ];
 
     /**
-     * Get the alunos for the turma.
+     * Get the matriculas for the turma.
      */
-    public function alunos(): HasMany
+    public function matriculas(): HasMany
     {
-        return $this->hasMany(Aluno::class);
+        return $this->hasMany(Matricula::class);
+    }
+
+    /**
+     * Get the alunos for the turma through matriculas.
+     */
+    public function alunos(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Aluno::class,
+            Matricula::class,
+            'turma_id',  // Foreign key on matriculas table
+            'id',        // Foreign key on alunos table
+            'id',        // Local key on turmas table
+            'aluno_id'   // Local key on matriculas table
+        );
     }
 
     /**
