@@ -68,6 +68,7 @@
 
 @section('js')
     {{-- Add here extra javascripts --}}
+    <script src="{{ asset('js/input-masks.js') }}"></script>
     <script>
         $(document).ready(function() {
             // Initialize tooltips
