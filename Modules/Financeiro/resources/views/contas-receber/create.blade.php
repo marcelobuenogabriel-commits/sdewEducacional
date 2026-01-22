@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="valor">Valor <span class="text-danger">*</span></label>
-                        <input id="valor" class="form-control @error('valor') is-invalid @enderror" type="number" step="0.01" name="valor" value="{{ old('valor') }}" required>
+                        <input id="valor" class="form-control @error('valor') is-invalid @enderror" type="text" name="valor" value="{{ old('valor') }}" required data-mask="currency" placeholder="R$ 0,00">
                         @error('valor')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
                     <div class="col-md-6 form-group">

@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="valor_mensalidade">Valor da Mensalidade <span class="text-danger">*</span></label>
-                        <input id="valor_mensalidade" class="form-control @error('valor_mensalidade') is-invalid @enderror" type="number" step="0.01" name="valor_mensalidade" value="{{ old('valor_mensalidade') }}" required>
+                        <input id="valor_mensalidade" class="form-control @error('valor_mensalidade') is-invalid @enderror" type="text" name="valor_mensalidade" value="{{ old('valor_mensalidade') }}" required data-mask="currency" placeholder="R$ 0,00">
                         @error('valor_mensalidade')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
                 </div>
