@@ -52,9 +52,24 @@ class ProfessorController extends Controller
             'observacoes' => 'nullable|string',
         ]);
 
-        Professor::create($validated);
-
-        return redirect()->route('professores.index')->with('success', 'Professor cadastrado com sucesso!');
+        try {
+            Professor::create($validated);
+            return redirect()->route('professores.index')->with('success', 'Professor cadastrado com sucesso!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Log the error for debugging
+            \Log::error('Erro ao cadastrar professor: ' . $e->getMessage());
+            
+            return redirect()->route('professores.create')
+                ->withInput()
+                ->withErrors(['message' => 'Falha ao salvar o cadastro. Verifique os dados e tente novamente.']);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Erro inesperado ao cadastrar professor: ' . $e->getMessage());
+            
+            return redirect()->route('professores.create')
+                ->withInput()
+                ->withErrors(['message' => 'Ocorreu um erro inesperado. Por favor, tente novamente.']);
+        }
     }
 
     /**
@@ -102,9 +117,24 @@ class ProfessorController extends Controller
             'observacoes' => 'nullable|string',
         ]);
 
-        $professor->update($validated);
-
-        return redirect()->route('professores.index')->with('success', 'Professor atualizado com sucesso!');
+        try {
+            $professor->update($validated);
+            return redirect()->route('professores.index')->with('success', 'Professor atualizado com sucesso!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Log the error for debugging
+            \Log::error('Erro ao atualizar professor: ' . $e->getMessage());
+            
+            return redirect()->route('professores.edit', $professor)
+                ->withInput()
+                ->withErrors(['message' => 'Falha ao atualizar o cadastro. Verifique os dados e tente novamente.']);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Erro inesperado ao atualizar professor: ' . $e->getMessage());
+            
+            return redirect()->route('professores.edit', $professor)
+                ->withInput()
+                ->withErrors(['message' => 'Ocorreu um erro inesperado. Por favor, tente novamente.']);
+        }
     }
 
     /**
