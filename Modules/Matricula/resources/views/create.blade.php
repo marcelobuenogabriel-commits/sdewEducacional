@@ -36,15 +36,35 @@
                         </select>
                         @error('turma_id')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label for="data_matricula">Data da Matrícula <span class="text-danger">*</span></label>
                         <input id="data_matricula" class="form-control @error('data_matricula') is-invalid @enderror" type="date" name="data_matricula" value="{{ old('data_matricula', date('Y-m-d')) }}" required>
                         @error('data_matricula')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="data_inicio">Data de Início <span class="text-danger">*</span></label>
+                        <input id="data_inicio" class="form-control @error('data_inicio') is-invalid @enderror" type="date" name="data_inicio" value="{{ old('data_inicio', date('Y-m-d')) }}" required>
+                        @error('data_inicio')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="data_fim">Data de Término <span class="text-danger">*</span></label>
+                        <input id="data_fim" class="form-control @error('data_fim') is-invalid @enderror" type="date" name="data_fim" value="{{ old('data_fim') }}" required>
+                        @error('data_fim')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="valor_mensalidade">Valor da Mensalidade <span class="text-danger">*</span></label>
                         <input id="valor_mensalidade" class="form-control @error('valor_mensalidade') is-invalid @enderror" type="text" name="valor_mensalidade" value="{{ old('valor_mensalidade') }}" required data-mask="currency" placeholder="R$ 0,00">
                         @error('valor_mensalidade')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="numero_parcelas">Número de Parcelas <span class="text-danger">*</span></label>
+                        <input id="numero_parcelas" class="form-control @error('numero_parcelas') is-invalid @enderror" type="number" name="numero_parcelas" value="{{ old('numero_parcelas', 12) }}" required min="1" max="24">
+                        @error('numero_parcelas')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="observacoes">Observações</label>
+                        <textarea id="observacoes" name="observacoes" rows="3" class="form-control @error('observacoes') is-invalid @enderror">{{ old('observacoes') }}</textarea>
+                        @error('observacoes')<span class="invalid-feedback">{{ $message }}</span>@enderror
                     </div>
                 </div>
             </div>
