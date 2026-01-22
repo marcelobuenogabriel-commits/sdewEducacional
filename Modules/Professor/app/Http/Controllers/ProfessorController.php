@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Modules\Professor\Models\Professor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
 
 class ProfessorController extends Controller
 {
@@ -56,7 +57,7 @@ class ProfessorController extends Controller
         try {
             Professor::create($validated);
             return redirect()->route('professores.index')->with('success', 'Professor cadastrado com sucesso!');
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             // Log the error for debugging
             Log::error('Erro ao cadastrar professor: ' . $e->getMessage());
             
@@ -121,7 +122,7 @@ class ProfessorController extends Controller
         try {
             $professor->update($validated);
             return redirect()->route('professores.index')->with('success', 'Professor atualizado com sucesso!');
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             // Log the error for debugging
             Log::error('Erro ao atualizar professor: ' . $e->getMessage());
             
