@@ -7,32 +7,6 @@
     'use strict';
 
     /**
-     * Apply mask to an input element
-     */
-    function applyMask(input, mask, options = {}) {
-        if (!input) return;
-        
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            let maskedValue = '';
-            let maskIndex = 0;
-            
-            for (let i = 0; i < value.length && maskIndex < mask.length; i++) {
-                while (maskIndex < mask.length && mask[maskIndex] !== '9') {
-                    maskedValue += mask[maskIndex];
-                    maskIndex++;
-                }
-                if (maskIndex < mask.length) {
-                    maskedValue += value[i];
-                    maskIndex++;
-                }
-            }
-            
-            e.target.value = maskedValue;
-        });
-    }
-
-    /**
      * Apply CPF mask (000.000.000-00)
      */
     function applyCPFMask(input) {
@@ -139,6 +113,13 @@
         
         input.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
+            
+            // Handle empty value
+            if (!value || value === '') {
+                e.target.value = '';
+                return;
+            }
+            
             value = (parseInt(value) / 100).toFixed(2);
             value = value.replace('.', ',');
             value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
@@ -148,7 +129,13 @@
         // Remove mask before form submission
         input.form?.addEventListener('submit', function() {
             let value = input.value.replace(/\D/g, '');
-            input.value = (parseInt(value) / 100).toFixed(2);
+            
+            // Handle empty value
+            if (!value || value === '') {
+                input.value = '0.00';
+            } else {
+                input.value = (parseInt(value) / 100).toFixed(2);
+            }
         });
     }
 
